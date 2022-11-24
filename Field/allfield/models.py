@@ -3,35 +3,21 @@ from django.db import models
 from django.contrib.postgres.fields import ArrayField
 # Create your models here.
 class Field(models.Model ):
-    COLOR_CHOICES = (
+    list_select = (
         ('1', 'Hello'),
         ('2', 'World'),
     )
-    list = [
+    list_boolean = [
         (True, 'True'),
         (False, 'False'),
     ]
 
     big_integer_field = models.BigIntegerField(verbose_name="Big Integer Field", help_text="Big integer field", error_messages="Vui lòng nhập lại")
-    boolean_field = models.BooleanField(default=True, choices=list,verbose_name="Boolean field", help_text="Boolean field", 
-        error_messages ={
-            "required":"Trường này là trường bắt buộc",
-            "invalid_choice": "Lựa chọn không hợp lệ"
-        })
-    # select_muitiple_filed = models.CharField(default=1, choices=COLOR_CHOICES ,max_length=100, verbose_name="Select Field", help_text="Select Field")    
-    # select_muitiple_filed = ArrayField(
-    #     models.CharField(max_length=2, blank=True),
-    #     choices=COLOR_CHOICES, 
-    #     default=COLOR_CHOICES[0]
-    # )
+    boolean_field = models.BooleanField(default=list_boolean[0], choices=list_boolean,verbose_name="Boolean field", help_text="Boolean field")
+    # select_muitiple_filed = models.CharField(default=1, choices=list_select ,max_length=100, verbose_name="Select Field", help_text="Select Field")    
     binary_field = models.BinaryField(verbose_name="Binary Field", help_text="Binary Field", error_messages="Vui lòng nhập lại")
     char_filed =  models.CharField(editable=True, null=True, max_length=100, verbose_name="Char Field", help_text="Char Field", error_messages="Vui lòng nhập lại" )
-    select_filed =  models.CharField(choices=COLOR_CHOICES ,max_length=100, verbose_name="Select Field", help_text="Select Field", 
-        error_messages ={
-            "required":"Trường này là trường bắt buộc",
-            "invalid_choice": "Lựa chọn không hợp lệ"
-        }
-     )
+    select_filed =  models.CharField(choices=list_select ,max_length=100, verbose_name="Select Field", help_text="Select Field")
     date_filed = models.DateField(verbose_name="Date Field", help_text="Date Field", error_messages="Vui lòng nhập lại")
     dateTime_filed =  models.DateTimeField(verbose_name="DateTime Field", help_text="DateTime Field", error_messages="Vui lòng nhập lại")
     decimal_filed =  models.DecimalField(decimal_places=3, max_digits=12,verbose_name="Decimal Field", help_text="Decimal Field", error_messages="Vui lòng nhập lại" )

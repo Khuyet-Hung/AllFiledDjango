@@ -1,16 +1,6 @@
-from django.forms import *
+from django.forms import CheckboxSelectMultiple, ModelForm, RadioSelect, SelectMultiple, Textarea
+from django  import forms
 from . import models
-
-
-# class EmployeeForm(ModelForm):
-#     class Meta:
-#         model = models.Employee
-#         fields = '__all__'
-
-# class FormDemo(ModelForm):
-#     class Meta:
-#         model = models.Employee
-#         fields = '__all__'
 
 
 class FieldForm(ModelForm):

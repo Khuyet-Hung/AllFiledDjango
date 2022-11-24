@@ -38,9 +38,7 @@ def serialize_form(form: 'BaseForm'):
         if field['type'] == 'select' or field['type'] == 'radio' or field['type'] == 'checkbox':
             print(type(value))
             field['choices'] = [c for c in value.choices]
-            # field['choices'] = [(c[0].value, c[1]) if c[0] else c for c in value.choices]
             field['multiple'] = value.widget.allow_multiple_selected
-
 
         # if field['type'] == 'select' or field['type'] == 'radio' or field['type'] == 'checkbox':
         #     field['choices'] = [c for c in value.choices]

@@ -46,7 +46,7 @@
             </div>
             {% elif item.type == 'checkbox' or item.type == 'radio' %} {% for radio in item.choices %}
             <div class="form-check form-check-inline">
-                <input value="{{radio.0}}" {% if item.editable %}disabled{%endif%} type="{{item.type}}" class="form-check-input form-control-field" name="{{item.name}}" id="id_{{item.name}}_{{radio.0}}" />
+                <input {%if radio.0 %}checked{% endif%} value="{{radio.0}}" {% if item.editable %}disabled{%endif%} type="{{item.type}}" class="form-check-input form-control-field" name="{{item.name}}" id="id_{{item.name}}_{{radio.0}}" />
                 <label class="form-check-label" for="id_{{item.name}}_{{radio.0}}">{{radio.1}}</label>
             </div>
 
@@ -159,7 +159,6 @@
             //     }
             // }
             var serializedData = $(this).serialize();
-
             console.log(serializedData)
                 // gọi post của ajax
             $.ajax({
