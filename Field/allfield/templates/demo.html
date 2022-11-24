@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous" />
+</head>
+
+<body>
+    <div class="container mt-5">
+        <form id="field-form" enctype="multipart/form-data">
+            {% csrf_token %} {% for item in form %}
+            <h2>{{item}}</h2>
+            {% if item.type == 'select' and not item.multiple %}
+            <div class="form-group">
+                <label for="id_{{item.name}}">{{item.label}}: </label>
+                <select {% if item.multiple %}multiple{%endif%} name="{{item.name}}" class="form-control form-control-field" id="id_{{item.name}}">
+                  {% for option in item.choices %}
+                  <option value="{{option.0}}">{{option.1}}</option>
+                  {% endfor%}
+                </select>
+                <div class="valid-feedback">
+                    Hoàn thành
+                </div>
+                <div id="err_mess_id_{{item.name}}" class="invalid-feedback">
+                </div>
+                <small class="form-text text-muted"> {{item.help_text}} </small>
+            </div>
+            {% elif item.type == 'select' and item.multiple %}
+            <div class="form-group">
+                <label for="id_{{item.name}}">{{item.label}}: </label>
+                <select {% if item.multiple %}multiple{%endif%} name="{{item.name}}" class="form-control form-control-field" id="id_{{item.name}}">
+                  {% for option in item.choices %}
+                  <option value="{{option.0}}">{{option.1}}</option>
+                  {% endfor%}
+                </select>
+                <div class="valid-feedback">
+                    Hoàn thành
+                </div>
+                <div id="err_mess_id_{{item.name}}" class="invalid-feedback">
+                </div>
+                <small class="form-text text-muted"> {{item.help_text}} </small>
+            </div>
+            {% elif item.type == 'checkbox' or item.type == 'radio' %} {% for radio in item.choices %}
+            <div class="form-check form-check-inline">
+                <input value="{{radio.0}}" {% if item.editable %}disabled{%endif%} type="{{item.type}}" class="form-check-input form-control-field" name="{{item.name}}" id="id_{{item.name}}_{{radio.0}}" />
+                <label class="form-check-label" for="id_{{item.name}}_{{radio.0}}">{{radio.1}}</label>
+            </div>
+
+            {% endfor%}
+            <small class="form-text text-muted"> {{item.help_text}} </small>
+            <small id="err_mess_id_{{item.name}}" class="form-text text-danger"> </small> {% elif item.type == 'datetime' %}
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-6">
+                        <label for="id_{{item.name}}">{{item.label}}: </label>
+                        <input {% if item.required %}required{%endif%} {% if item.editable %}disabled{%endif%} title="{{item.help_text}}" maxlength="{{item.maxlength}}" class="form-control form-control-field" type="time" name="{{item.name}}" id="id_{{item.name}}" value="{{item.default}}"
+                            placeholder="{{item.verbose_name}}" />
+                        <small class="form-text text-muted"> {{item.help_text}} </small>
+                        <div class="valid-feedback">
+                            Hoàn thành
+                        </div>
+                        <div id="err_mess_id_{{item.name}}" class="invalid-feedback">
+                        </div>
+                    </div>
+
+                    <div class="col-6">
+                        <label for="id_{{item.name}}">{{item.label}}: </label>
+                        <input {% if item.required %}required{%endif%} {% if item.editable %}disabled{%endif%} title="{{item.help_text}}" maxlength="{{item.maxlength}}" class="form-control form-control-field" type="date" name="{{item.name}}" id="id_{{item.name}}" value="{{item.default}}"
+                            placeholder="{{item.verbose_name}}" />
+                        <small class="form-text text-muted"> {{item.help_text}} </small>
+                        <div class="valid-feedback">
+                            Hoàn thành
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% elif item.type == 'textarea' %}
+            <div class="form-group">
+                <label for="id_{{item.name}}">{{item.label}}: </label>
+                <textarea {% if item.required %}required{%endif%} {% if item.editable %}disabled{%endif%} title="{{item.help_text}}" maxlength="{{item.maxlength}}" class="form-control form-control-field" type="{{item.type}}" name="{{item.name}}" id="id_{{item.name}}"
+                    placeholder="{{item.verbose_name}}" fcols="{{item.cols}}" rows="{{item.rows}}">{{item.default}}</textarea>
+                <small class="form-text text-muted"> {{item.help_text}} </small>
+                <div class="valid-feedback">
+                    Hoàn thành
+                </div>
+                <div id="err_mess_id_{{item.name}}" class="invalid-feedback">
+                </div>
+            </div>
+            {% elif item.type == 'file' %}
+            <div class="input-group">
+                <div class="custom-file"> <input class="" {% if item.required %}required{%endif%} {% if item.editable %}disabled{%endif%} accept="{{item.accept}}" title="{{item.help_text}}" class="form-control form-control-field" type="{{item.type}}" name="{{item.name}}" id="id_{{item.name}}"
+                        value="{{item.default}}" aria-describedby="{{item.name}}" /> </div>
+            </div>
+            <div class="valid-feedback">
+                Hoàn thành
+            </div>
+            <div id="err_mess_id_{{item.name}}" class="invalid-feedback">
+            </div>
+            <small class="form-text text-muted">
+              {{item.help_text}}
+            </small> {% elif item.type == 'number' %}
+            <div class="form-group">
+                <label for="id_{{item.name}}">{{item.label}}: </label>
+                <input {% if item.required %}required{%endif%} {% if item.editable %}disabled{%endif%} {% if step is not None %} step="{{item.step}}" {%else%}step="1" {%endif%} min="{{item.min}}" max="{{item.max}}" title="{{item.help_text}}" class="form-control form-control-field"
+                    type="{{item.type}}" name="{{item.name}}" id="id_{{item.name}}" value="{{item.default}}" placeholder="{{item.verbose_name}}" />
+                <div class="valid-feedback">
+                    Hoàn thành
+                </div>
+                <div id="err_mess_id_{{item.name}}" class="invalid-feedback">
+                </div>
+                <small class="form-text text-muted">
+                  {{item.help_text}}
+                </small>
+            </div>
+            {% else %}
+            <div class="form-group">
+                <label for="id_{{item.name}}">{{item.label}}: </label>
+                <input {% if item.required %}required{%endif%} {% if item.editable %}disabled{%endif%} title="{{item.help_text}}" maxlength="{{item.maxlength}}" class="form-control form-control-field" type="{{item.type}}" name="{{item.name}}" id="id_{{item.name}}" value="{{item.default}}"
+                    placeholder="{{item.verbose_name}}" />
+                <div class="valid-feedback">
+                    Hoàn thành
+                </div>
+                <div id="err_mess_id_{{item.name}}" class="invalid-feedback">
+                </div>
+                <small class="form-text text-muted">
+                  {{item.help_text}}
+                </small>
+            </div>
+            {% endif %} {% endfor%}
+            <button type="submit" class="btn btn-primary">OK</button>
+        </form>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-Fy6S3B9q64WdZWQUiU+q4/2Lc9npb8tCaSX9FK7E8HnRr0Jz8D6OP9dO5Vg3Q9ct" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.min.js" integrity="sha384-+sLIOodYLS7CIrQpBjl+C7nPvqq+FbNUBDunl/OZv93DB7Ln/533i8e/mZXLi/P+" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.6.1.js" integrity="sha256-3zlB5s2uwoUzrXK3BT7AX3FyvojsraNFxCc2vC/7pNI=" crossorigin="anonymous"></script>
+    <script>
+        const form = $("#field-form");
+
+        form.submit(function(e) {
+            // ngăn tải lại trang và các hành động mặc định
+            e.preventDefault();
+            // serialize dữ liệu để gửi dữ liệu trong form.
+            var listValueOptions = [];
+            for (key of this) {
+                if (key.type == "select-multiple") {
+                    for (option of key.selectedOptions) {
+                        listValueOptions.push(option.value);
+                    }
+                    // key.value = listValueOptions.toString();
+                    console.log([key])
+                }
+            }
+            var serializedData = $(this).serialize();
+
+            console.log(serializedData)
+                // gọi post của ajax
+            $.ajax({
+                url: '/',
+                method: "POST",
+                data: serializedData,
+                complete: function(response) {
+                    // tạo biến chứa các input trong form
+                    var inputs = $('.form-control-field')
+                        // lập qua từng input 
+                    for (input of inputs) {
+                        // xóa giá trị error và gắn giá trị success cho mỗi input
+                        input.classList.remove('is-invalid')
+                        input.classList.add('is-valid')
+                            // lập qua từng phần tử của các lỗi được server trả về
+                        for (resp in response.responseJSON.error) {
+                            // kiểm tra các tên của input có nằm trong danh sách các phần tử error được trả về hay k 
+                            if (resp === input.name) {
+                                // nếu có thì xóa giá trị success cho input và gắn giá trị error
+                                input.classList.remove('is-valid')
+                                input.classList.add('is-invalid')
+                                    // gắn error message cho các input lỗi
+                                $(`#err_mess_id_${resp}`)[0].innerText = response.responseJSON.error[resp]
+                            }
+                        }
+                    }
+                }
+            })
+        })
+    </script>
+</body>
+
+</html>
