@@ -147,16 +147,17 @@
             // ngăn tải lại trang và các hành động mặc định
             e.preventDefault();
             // serialize dữ liệu để gửi dữ liệu trong form.
-            var listValueOptions = [];
-            for (key of this) {
-                if (key.type == "select-multiple") {
-                    for (option of key.selectedOptions) {
-                        listValueOptions.push(option.value);
-                    }
-                    // key.value = listValueOptions.toString();
-                    console.log([key])
-                }
-            }
+
+            // var listValueOptions = [];
+            // for (key of this) {
+            //     if (key.type == "select-multiple") {
+            //         for (option of key.selectedOptions) {
+            //             listValueOptions.push(option.value);
+            //         }
+            //         key.value = listValueOptions.toString();
+            //         console.log([key])
+            //     }
+            // }
             var serializedData = $(this).serialize();
 
             console.log(serializedData)

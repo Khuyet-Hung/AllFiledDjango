@@ -14,7 +14,7 @@ class index(View):
 
     def post(self, request):
         form = FieldForm(request.POST, request.FILES)
-        print (form.as_table)
+        print (request.POST)
         if form.is_valid():
             return JsonResponse({"instance": form.errors})
         else:

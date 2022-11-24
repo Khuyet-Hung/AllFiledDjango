@@ -1,4 +1,4 @@
-from django.forms import CheckboxSelectMultiple, ModelForm, RadioSelect, SelectMultiple, Textarea
+from django.forms import *
 from . import models
 
 
