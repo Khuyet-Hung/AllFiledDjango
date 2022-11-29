@@ -1,7 +1,5 @@
-
 from django.forms import BaseForm, Textarea, DateField, DateTimeField, TimeField
 from django import forms
-from django.forms.models import ModelChoiceIterator
 
 class FieldDjango():
     def charFile():
@@ -17,7 +15,6 @@ def serialize_form(form: 'BaseForm'):
             'required': value.required,
             'label': value.label,
             'help_text': value.help_text,
-            'error_messages': value.error_messages,
             **value.widget.attrs,
         }
         
@@ -35,9 +32,8 @@ def serialize_form(form: 'BaseForm'):
             field.type = 'hidden'
         else:
             field['type'] = value.widget.input_type
-        if field['type'] == 'select' or field['type'] == 'radio' or field['type'] == 'checkbox':
-            print(type(value))
-            field['choices'] = [c for c in value.choices]
+        if field['type'] == 'select' or field['type'] == 'radio':
+            field['choices'] = [c for c in value.widget.choices]
             field['multiple'] = value.widget.allow_multiple_selected
 
         # if field['type'] == 'select' or field['type'] == 'radio' or field['type'] == 'checkbox':
@@ -59,7 +55,3 @@ def serialize_form(form: 'BaseForm'):
                     field['minlength'] = value.min_length
         result.append(field)
     return result
-
-    
-        # elif field['type'] == 'datetime':
-        #     field['maxlength'] 

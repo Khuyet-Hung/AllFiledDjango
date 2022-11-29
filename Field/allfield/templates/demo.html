@@ -14,10 +14,10 @@
         <form id="field-form" enctype="multipart/form-data">
             {% csrf_token %} {% for item in form %}
             <h2>{{item}}</h2>
-            {% if item.type == 'select' and not item.multiple %}
+            {% if item.type == 'select'%}
             <div class="form-group">
                 <label for="id_{{item.name}}">{{item.label}}: </label>
-                <select {% if item.multiple %}multiple{%endif%} name="{{item.name}}" class="form-control form-control-field" id="id_{{item.name}}">
+                <select {% if item.required %}required{%endif%} {% if item.editable %}disabled{%endif%} {% if item.multiple %}multiple{%endif%} name="{{item.name}}" class="form-control form-control-field" id="id_{{item.name}}">
                   {% for option in item.choices %}
                   <option value="{{option.0}}">{{option.1}}</option>
                   {% endfor%}
@@ -29,28 +29,11 @@
                 </div>
                 <small class="form-text text-muted"> {{item.help_text}} </small>
             </div>
-            {% elif item.type == 'select' and item.multiple %}
-            <div class="form-group">
-                <label for="id_{{item.name}}">{{item.label}}: </label>
-                <select {% if item.multiple %}multiple{%endif%} name="{{item.name}}" class="form-control form-control-field" id="id_{{item.name}}">
-                  {% for option in item.choices %}
-                  <option value="{{option.0}}">{{option.1}}</option>
-                  {% endfor%}
-                </select>
-                <div class="valid-feedback">
-                    Hoàn thành
-                </div>
-                <div id="err_mess_id_{{item.name}}" class="invalid-feedback">
-                </div>
-                <small class="form-text text-muted"> {{item.help_text}} </small>
-            </div>
-            {% elif item.type == 'checkbox' or item.type == 'radio' %} {% for radio in item.choices %}
+            {% elif item.type == 'checkbox'%}
             <div class="form-check form-check-inline">
-                <input {%if radio.0 %}checked{% endif%} value="{{radio.0}}" {% if item.editable %}disabled{%endif%} type="{{item.type}}" class="form-check-input form-control-field" name="{{item.name}}" id="id_{{item.name}}_{{radio.0}}" />
-                <label class="form-check-label" for="id_{{item.name}}_{{radio.0}}">{{radio.1}}</label>
+                <input {% if item.required %}required{%endif%} {%if item %}checked{% endif%} {% if item.editable %}disabled{%endif%} type="{{item.type}}" class="form-check-input form-control-field" name="{{item.name}}" id="id_{{item.name}}" />
+                <label class="form-check-label" for="id_{{item.name}}">{{item.label}}</label>
             </div>
-
-            {% endfor%}
             <small class="form-text text-muted"> {{item.help_text}} </small>
             <small id="err_mess_id_{{item.name}}" class="form-text text-danger"> </small> {% elif item.type == 'datetime' %}
             <div class="form-group">
@@ -147,26 +130,20 @@
             // ngăn tải lại trang và các hành động mặc định
             e.preventDefault();
             // serialize dữ liệu để gửi dữ liệu trong form.
-
-            // var listValueOptions = [];
-            // for (key of this) {
-            //     if (key.type == "select-multiple") {
-            //         for (option of key.selectedOptions) {
-            //             listValueOptions.push(option.value);
-            //         }
-            //         key.value = listValueOptions.toString();
-            //         console.log([key])
-            //     }
-            // }
-            var serializedData = $(this).serialize();
+            var serializedData = new FormData(this);
+            // var serializedData = $(this).serialize();
             console.log(serializedData)
                 // gọi post của ajax
             $.ajax({
                 url: '/',
                 method: "POST",
                 data: serializedData,
+                cache: false,
+                contentType: false,
+                processData: false,
                 complete: function(response) {
-                    // tạo biến chứa các input trong form
+                    console.log(response.responseJSON.error)
+                        // tạo biến chứa các input trong form
                     var inputs = $('.form-control-field')
                         // lập qua từng input 
                     for (input of inputs) {
@@ -175,7 +152,7 @@
                         input.classList.add('is-valid')
                             // lập qua từng phần tử của các lỗi được server trả về
                         for (resp in response.responseJSON.error) {
-                            // kiểm tra các tên của input có nằm trong danh sách các phần tử error được trả về hay k 
+                            // kiểm tra các tên của input có nằm trong danh sách các phần tử error được trả về hay k
                             if (resp === input.name) {
                                 // nếu có thì xóa giá trị success cho input và gắn giá trị error
                                 input.classList.remove('is-valid')

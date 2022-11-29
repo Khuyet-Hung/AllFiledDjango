@@ -1,10 +1,9 @@
-from django.http import HttpResponse
 from django.shortcuts import render
 from django.views import View
 from . import module
 from .form import FieldForm
 from django.http import JsonResponse
-from django.core import serializers
+import json
 
 # Create your views here.
 class Index(View):
@@ -14,8 +13,8 @@ class Index(View):
 
     def post(self, request):
         form = FieldForm(request.POST, request.FILES)
-        print (request.POST)
         if form.is_valid():
+            form.save()
             return JsonResponse({"instance": form.errors})
         else:
              return JsonResponse({"error": form.errors})
